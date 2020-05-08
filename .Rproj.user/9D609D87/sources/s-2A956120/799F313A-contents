@@ -1,0 +1,13 @@
+#GenevAnalytics
+
+rm(list = ls())
+install.packages("devtools")
+library(devtools)
+devtools::install_github("JimmyDang14/givedata")
+library(dplyr)
+
+library(givedata)
+data("Infraction_Code_penal_par_commune", package="givedata")
+ls()
+Infraction_Code_penal_par_commune %>% head()
+
