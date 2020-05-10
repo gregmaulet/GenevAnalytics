@@ -2,55 +2,53 @@
 title: "GenevAnalytics"
 output: html_document
 ---
+
 rm(list = ls())
-install.packages("devtools")
-devtools::install_github("JimmyDang14/givedata")
+
 ```{r}
-library(devtools)
 library(dplyr)
 
-library(givedata)
-data("DepensesInvestiss_00_17", package="givedata")
+data("DepensesInvestiss_00_17")
 ls()
 DepensesInvestiss_00_17 %>% head()
 
-data("Loyermoyen100m2_06_19", package="givedata")
+data("Loyermoyen100m2_06_19")
 ls()
 Loyermoyen100m2_06_19 %>% head()
 
-data("NEcolePrimaire", package="givedata")
+data("NEcolePrimaire")
 ls()
 NEcolePrimaire %>% head()
 
-data("NHabitants_00_19", package="givedata")
+data("NHabitants_00_19")
 ls()
 NHabitants_00_19 %>% head()
 
-data("NInfractions_08_19", package="givedata")
+data("NInfractions_08_19")
 ls()
 NInfractions_08_19 %>% head()
 
-data("NMedecins", package="givedata")
+data("NMedecins")
 ls()
 NMedecins %>% head()
 
-data("NParcs", package="givedata")
+data("NParcs")
 ls()
 NParcs %>% head()
 
-data("NSupermarches", package="givedata")
+data("NSupermarches")
 ls()
 NSupermarches %>% head()
 
-data("PMedianeAppart100m2_00_17", package="givedata")
+data("PMedianeAppart100m2_00_17")
 ls()
 PMedianeAppart100m2_00_17 %>% head()
 
-data("PMedianeVilla_00_17", package="givedata")
+data("PMedianeVilla_00_17")
 ls()
 PMedianeVilla_00_17 %>% head()
 
-data("Superficie", package="givedata")
+data("Superficie")
 ls()
 Superficie %>% head()
 
