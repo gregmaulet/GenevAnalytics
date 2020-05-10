@@ -104,7 +104,7 @@ NHabitants_00_19[1] <- NULL
 NHabitantsprov <- head(cbind(Commune, NHabitants_00_19), 46)
 NHabitants_OK <- NHabitantsprov[,-1]
 rownames(NHabitants_OK) <- NHabitantsprov[,1]
-rm(NHabitants_00_19, NHabitantsprov)
+rm(NHabitantsprov)
 #3.5) Ratio Infraction pour 1000 habitants
 matrixNInfractions_08_19 <- data.matrix(NInfractions_08_19)
 matrixNHabitants_00_19 <- data.matrix(NHabitants_00_19)
@@ -116,7 +116,7 @@ ratioInfractionprov[1] <- NULL
 ratioInfractionprov2 <- head(cbind(Commune, ratioInfractionprov), 46)
 ratioInfraction <- ratioInfractionprov2[,-1]
 rownames(ratioInfraction) <- ratioInfractionprov2[,1]
-rm(  matrixNInfractions_08_19, matrixNHabitants_00_19, matrixNHabitants_00_19prov,
+rm(matrixNInfractions_08_19, matrixNHabitants_00_19, matrixNHabitants_00_19prov,
    matrixratioInfractionprov,matrixratioInfraction,ratioInfractionprov,ratioInfractionprov2)
 #3.6) Ratio Medecin pour 1000 habitants
 matrixNMedecins <- data.matrix(NMedecins)
@@ -297,7 +297,7 @@ return(x)
 }
 
 ##6) CLEAN USELESS DATA------------------------------------------------------
-rm(Commune, DepensesInvestiss_00_17,NEcolePrimaire, NInfractions_08_19, NMedecins, NParcs, NSupermarches)
+rm(Commune, DepensesInvestiss_00_17,NEcolePrimaire, NInfractions_08_19, NMedecins, NParcs, NSupermarches, NHabitants_00_19)
 
 
 ##7) LISTE FONCTIONS-------------------------------------------
