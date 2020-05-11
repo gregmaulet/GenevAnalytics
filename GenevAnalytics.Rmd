@@ -69,8 +69,13 @@ rm(x)
 
 ###3.0)CLEANDATA&RATIOS---------------------------------------
 #3.1)Ratio Depenses d'Investissement de la Commune par habitant
+DepensesInvestiss_00_17[1] <- NULL
+DepensesInvestiss_00_17prov <- head(cbind(Commune, DepensesInvestiss_00_17), 46)
+DepensesInvestiss_00_17OK <- DepensesInvestiss_00_17prov[,-1]
+rownames(DepensesInvestiss_00_17OK) <- DepensesInvestiss_00_17prov[,1]
+rm(DepensesInvestiss_00_17, DepensesInvestiss_00_17prov)
 
-matrixDepensesInvestiss_00_17 <- data.matrix(DepensesInvestiss_00_17)
+matrixDepensesInvestiss_00_17 <- data.matrix(DepensesInvestiss_00_17OK)
 matrixNHabitants_00_19 <- data.matrix(NHabitants_00_19)
 matrixNHabitants_00_19prov <- matrixNHabitants_00_19[,-(21:22)]
 matrixratioDIprov <- sweep(matrixDepensesInvestiss_00_17, 1, matrixNHabitants_00_19prov, "/")
@@ -104,7 +109,7 @@ NHabitants_00_19[1] <- NULL
 NHabitantsprov <- head(cbind(Commune, NHabitants_00_19), 46)
 NHabitants_OK <- NHabitantsprov[,-1]
 rownames(NHabitants_OK) <- NHabitantsprov[,1]
-rm(NHabitantsprov)
+rm(NHabitants_00_19, NHabitantsprov)
 #3.5) Ratio Infraction pour 1000 habitants
 matrixNInfractions_08_19 <- data.matrix(NInfractions_08_19)
 matrixNHabitants_00_19 <- data.matrix(NHabitants_00_19)
@@ -229,7 +234,7 @@ plot( tx,type="l", col="blue", lwd=2, xlab="Year", xaxt = "n", ylab="CHF", main=
 axis(1, at=1:18, labels=2000:2017)}
 
 #4.11) Densite population (plot discutable vu que c'est la meme courbe que celle de la population)
-fplotdensitepopulation <- function(a){x <- Densite_population[c(a),c(2:21)]
+fplotdensitepopulation <- function(a){x <- Densite_population[c(a),c(1:20)]
 tx <- t(x)
 plot( tx,type="l", col="blue", lwd=2, xlab="Year", xaxt = "n", ylab="Nombre de personnes/km2",main="Densite de la population")
 axis(1, at=1:20, labels=2000:2019)}
