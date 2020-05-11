@@ -65,6 +65,7 @@ Commune <- matrix(x)
 rm(x)
 
 ###3.0)CLEANDATA&RATIOS---------------------------------------
+
 #3.1)Ratio Depenses d'Investissement de la Commune par habitant
 matrixDepensesInvestiss_00_17 <- data.matrix(DepensesInvestiss_00_17)
 matrixNHabitants_00_19 <- data.matrix(NHabitants_00_19)
@@ -183,7 +184,12 @@ rm(matrixSuperficieprov,
    matrixDensite_population, Densite_populationprov, Densite_populationprov2)
 
 
-
+#3.12)Superficie a clean
+Superficie[1] <- NULL
+Superficieprov <- head(cbind(Commune, Superficie), 46)
+Superficie_OK <- Superficieprov[,-1]
+rownames(Superficie_OK) <- Superficieprov[,1]
+rm(Superficie, Superficieprov)
 ###4.0) FONCTIONS PLOT------------------------------
 #4.1) DI (funratioDIplot("nom de la commune")) & examples
 fplotratioDI <- function(a){x <- ratioDI[c(a),c(2:19)]
@@ -303,7 +309,7 @@ return(x)
 }
 
 #5.12) Superficie km2
-freturnsuperficie <- function(a){x <- Superficie[c(a), c(2)]
+freturnsuperficie <- function(a){x <- Superficie_OK[c(a), c(2)]
 print("Superficie de la commune en km2 :") 
 return(x)
 }
@@ -360,22 +366,31 @@ print(freturndensitepopulation(a))
 fplotdensitepopulation(a)
 print(freturnsuperficie(a))
 }
-fpopulation("Geneve")
-
-freturnpopulation("Geneve")
-fplotpopulation("Geneve")
-freturndensitepopulation("Geneve")
-fplotdensitepopulation("Geneve")
-
-
-
-
-
 
 fimmobilier <- function(a){
-   fplotloyer(a)
-   fplotprixappart("Geneve")
-   fplotprixvilla("Geneve")}
-fcommodite <- function(){}
-fdivers <- function(){}
+print(freturnloyer(a))
+fplotloyer(a)
+print(freturnprixappart(a))
+fplotprixappart(a)
+print(freturnprixvilla(a))
+fplotprixvilla(a)
+}
 
+fcommodite <- function(a){
+print(freturnsupermarche(a))
+print(freturnecole(a))
+print(freturnparc(a))
+}
+
+fservice <- function(a){
+print(freturninfraction(a))
+fplotinfraction(a)
+print(freturnDI(a))
+fplotratioDI(a)
+print(freturnmedecin(a))
+}
+
+fpopulation("Geneve")
+fimmobilier("Geneve")
+fcommodite("Geneve")
+fservice("Geneve")
