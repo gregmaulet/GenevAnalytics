@@ -354,17 +354,15 @@ freturndensitepopulation("Geneve")
 freturnsuperficie("Geneve")
 
 fpopulation <- function(a){
-freturnpopulation(a)
+print(freturnpopulation(a))
 fplotpopulation(a)
-freturndensitepopulation(a)
+print(freturndensitepopulation(a))
 fplotdensitepopulation(a)
 }
 fpopulation("Geneve")
 
-print("Nombre d'habitants 2019 :") 
 freturnpopulation("Geneve")
 fplotpopulation("Geneve")
-print("Nombre d'habitants/km2 2019 :") 
 freturndensitepopulation("Geneve")
 fplotdensitepopulation("Geneve")
 
