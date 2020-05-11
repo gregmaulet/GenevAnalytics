@@ -5,7 +5,7 @@ output: html_document
 
 rm(list = ls())
 
-```{r}
+
 library(dplyr)
 
 data("DepensesInvestiss_00_17")
@@ -343,4 +343,4 @@ freturnprixvilla("Geneve","2010")
 freturndensitepopulation("Geneve","2010")
 
 freturnsuperficie("Geneve")
-```
+
