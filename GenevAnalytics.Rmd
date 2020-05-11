@@ -359,20 +359,31 @@ fplotpopulation(a)
 print(freturndensitepopulation(a))
 fplotdensitepopulation(a)
 }
+
+fimmobilier <- function(a){
+print(freturnloyer(a))
+fplotloyer(a)
+print(freturnprixappart(a))
+fplotprixappart(a)
+print(freturnprixvilla(a))
+fplotprixvilla(a)
+}
+
+fcommodite <- function(a){
+print(freturnsupermarche(a))
+print(freturnecole(a))
+print(freturnparc(a))
+}
+
+fservice <- function(a){
+print(freturninfraction(a))
+fplotinfraction(a)
+print(freturnDI(a))
+fplotratioDI(a)
+print(freturnmedecin(a))
+}
+
 fpopulation("Geneve")
-
-freturnpopulation("Geneve")
-fplotpopulation("Geneve")
-freturndensitepopulation("Geneve")
-fplotdensitepopulation("Geneve")
-
-
-
-
-
-
-fimmobilier <- function(a){fplotloyer(a),fplotprixappart("Geneve"),
-fplotprixvilla("Geneve")}
-fcommodite <- function(){}
-fdivers <- function(){}
-
+fimmobilier("Geneve")
+fcommodite("Geneve")
+fservice("Geneve")
