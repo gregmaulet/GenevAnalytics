@@ -235,14 +235,14 @@ plot( tx,type="l", col="blue", lwd=2, xlab="Year", xaxt = "n", ylab="Nombre de p
 axis(1, at=1:20, labels=2000:2019)}
 
 
-##5) FONCTIONS POUR OBTENIR DONNEES VOULUES D'UNE COMMUNE A UNE CERTAINE ANNEE------------------------------------------------------
+##5) FONCTIONS POUR OBTENIR DONNEES VOULUES D'UNE COMMUNE EN DERNIERE ANNEE DISPONIBLE------------------------------------------------------
 #5.1) DI
-freturnDI <- function(a,b){x <- ratioDI[c(a),c(b)]
+freturnDI <- function(a){x <- ratioDI[c(a),19]
 return(x)
 }
 
 #5.2) Loyermoyen100m2 
-freturnloyer <- function(a,b){x <- Loyermoyen100m2_06_19_OK[c(a),c(b)]
+freturnloyer <- function(a){x <- Loyermoyen100m2_06_19_OK[c(a),15]
 return(x)
 }
 
@@ -252,12 +252,12 @@ return(x)
 }
 
 #5.4) Population
-freturnpopulation <- function(a,b){x <- NHabitants_OK[c(a),c(b)]
+freturnpopulation <- function(a){x <- NHabitants_OK[c(a),21]
 return(x)
 }
 
 #5.5) Ratio Infraction pour 1000 habitants
-freturninfraction <- function(a,b){x <- ratioInfraction[c(a),c(b)]
+freturninfraction <- function(a){x <- ratioInfraction[c(a),13]
 return(x)
 }
 
@@ -277,17 +277,17 @@ return(x)
 }
 
 #5.9) Prix mediane appartement 100m2 
-freturnprixappart <- function(a,b){x <- PMedianeAppart100m2_00_17_OK[c(a),c(b)]
+freturnprixappart <- function(a){x <- PMedianeAppart100m2_00_17_OK[c(a),19]
 return(x)
 }
 
 #5.10) Prix mediane Villa
-freturnprixvilla <- function(a,b){x <- PMedianeVilla_00_17_OK[c(a),c(b)]
+freturnprixvilla <- function(a){x <- PMedianeVilla_00_17_OK[c(a),19]
 return(x)
 }
 
 #5.11) Densite population 
-freturndensitepopulation <- function(a,b){x <- Densite_population[c(a),c(b)]
+freturndensitepopulation <- function(a){x <- Densite_population[c(a),21]
 return(x)
 }
 
@@ -317,15 +317,15 @@ fplotdensitepopulation("Geneve")
 
 
 
-freturnDI("Geneve","2010")
+freturnDI("Geneve")
 
-freturnloyer("Geneve","2010")
+freturnloyer("Geneve")
 
 freturnecole("Geneve")
 
-freturnpopulation("Geneve","2010")
+freturnpopulation("Geneve")
 
-freturninfraction("Geneve","2010")
+freturninfraction("Geneve")
 
 freturnmedecin("Geneve")
 
@@ -333,11 +333,27 @@ freturnparc("Geneve")
 
 freturnsupermarche("Geneve")
 
-freturnprixappart("Geneve","2010")
+freturnprixappart("Geneve")
 
-freturnprixvilla("Geneve","2010")
+freturnprixvilla("Geneve")
 
-freturndensitepopulation("Geneve","2010")
+freturndensitepopulation("Geneve")
 
 freturnsuperficie("Geneve")
+
+fpopulation <- function(a){
+print("Nombre d'habitants 2019 :") freturnpopulation(a)
+fplotpopulation(a)
+print("Nombre d'habitants/km2 2019 :") freturndensitepopulation(a)
+fplotdensitepopulation(a)
+
+
+
+
+}
+
+fimmobilier <- function(a){fplotloyer(a),fplotprixappart("Geneve"),
+fplotprixvilla("Geneve")}
+fcommodite <- function(){}
+fdivers <- function(){}
 
