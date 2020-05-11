@@ -105,6 +105,10 @@ NHabitants_OK <- NHabitantsprov[,-1]
 rownames(NHabitants_OK) <- NHabitantsprov[,1]
 rm(NHabitants_00_19, NHabitantsprov)
 #3.5) Ratio Infraction pour 1000 habitants
+data("NHabitants_00_19")
+ls()
+NHabitants_00_19 %>% head()
+
 matrixNInfractions_08_19 <- data.matrix(NInfractions_08_19)
 matrixNHabitants_00_19 <- data.matrix(NHabitants_00_19)
 matrixNHabitants_00_19prov <- matrixNHabitants_00_19[,-(3:10)]
@@ -228,7 +232,7 @@ plot( tx,type="l", col="blue", lwd=2, xlab="Year", xaxt = "n", ylab="CHF", main=
 axis(1, at=1:18, labels=2000:2017)}
 
 #4.11) Densite population (plot discutable vu que c'est la meme courbe que celle de la population)
-fplotdensitepopulation <- function(a){x <- Densite_population[c(a),c(1:20)]
+fplotdensitepopulation <- function(a){x <- Densite_population[c(a),c(2:21)]
 tx <- t(x)
 plot( tx,type="l", col="blue", lwd=2, xlab="Year", xaxt = "n", ylab="Nombre de personnes/km2",main="Densite de la population")
 axis(1, at=1:20, labels=2000:2019)}
