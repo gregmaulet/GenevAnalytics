@@ -1,5 +1,5 @@
 
-
+```{r}
 rm(list = ls())
 
 
@@ -394,3 +394,4 @@ fpopulation("Geneve")
 fimmobilier("Geneve")
 fcommodite("Geneve")
 fservice("Geneve")
+```
