@@ -303,7 +303,7 @@ return(x)
 }
 
 #5.12) Superficie km2
-freturnsuperficie <- function(a){x <- ratio_ecole[c(a), c(2)]
+freturnsuperficie <- function(a){x <- Superficie[c(a), c(2)]
 print("Superficie de la commune en km2 :") 
 return(x)
 }
@@ -358,6 +358,7 @@ print(freturnpopulation(a))
 fplotpopulation(a)
 print(freturndensitepopulation(a))
 fplotdensitepopulation(a)
+print(freturnsuperficie(a))
 }
 
 fimmobilier <- function(a){
