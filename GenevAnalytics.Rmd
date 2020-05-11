@@ -375,8 +375,10 @@ fplotdensitepopulation("Geneve")
 
 
 
-fimmobilier <- function(a){fplotloyer(a),fplotprixappart("Geneve"),
-fplotprixvilla("Geneve")}
+fimmobilier <- function(a){
+   fplotloyer(a)
+   fplotprixappart("Geneve")
+   fplotprixvilla("Geneve")}
 fcommodite <- function(){}
 fdivers <- function(){}
 
