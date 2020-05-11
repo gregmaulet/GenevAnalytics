@@ -342,15 +342,26 @@ freturndensitepopulation("Geneve")
 freturnsuperficie("Geneve")
 
 fpopulation <- function(a){
-print("Nombre d'habitants 2019 :") freturnpopulation(a)
+print("Nombre d'habitants 2019 :") 
+freturnpopulation(a)
 fplotpopulation(a)
-print("Nombre d'habitants/km2 2019 :") freturndensitepopulation(a)
+print("Nombre d'habitants/km2 2019 :") 
+freturndensitepopulation(a)
 fplotdensitepopulation(a)
-
-
-
-
 }
+fpopulation("Geneve")
+
+print("Nombre d'habitants 2019 :") 
+freturnpopulation("Geneve")
+fplotpopulation("Geneve")
+print("Nombre d'habitants/km2 2019 :") 
+freturndensitepopulation("Geneve")
+fplotdensitepopulation("Geneve")
+
+
+
+
+
 
 fimmobilier <- function(a){fplotloyer(a),fplotprixappart("Geneve"),
 fplotprixvilla("Geneve")}
