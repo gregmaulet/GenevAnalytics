@@ -1,5 +1,4 @@
-
-
+```{r}
 rm(list = ls())
 
 
@@ -65,6 +64,7 @@ Commune <- matrix(x)
 rm(x)
 
 ###3.0)CLEANDATA&RATIOS---------------------------------------
+
 #3.1)Ratio Depenses d'Investissement de la Commune par habitant
 matrixDepensesInvestiss_00_17 <- data.matrix(DepensesInvestiss_00_17)
 matrixNHabitants_00_19 <- data.matrix(NHabitants_00_19)
@@ -183,7 +183,12 @@ rm(matrixSuperficieprov,
    matrixDensite_population, Densite_populationprov, Densite_populationprov2)
 
 
-
+#3.12)Superficie a clean
+Superficie[1] <- NULL
+Superficieprov <- head(cbind(Commune, Superficie), 46)
+Superficie_OK <- Superficieprov[,-1]
+rownames(Superficie_OK) <- Superficieprov[,1]
+rm(Superficie, Superficieprov)
 ###4.0) FONCTIONS PLOT------------------------------
 #4.1) DI (funratioDIplot("nom de la commune")) & examples
 fplotratioDI <- function(a){x <- ratioDI[c(a),c(2:19)]
@@ -210,11 +215,6 @@ tx <- t(x)
 plot( tx,type="l", col="blue", lwd=2, xlab="Year", xaxt = "n", ylab="Nombre d'infractions",main="Nombre d'infractions du Code Penal par 1000 habitants")
 axis(1, at=1:12, labels=2008:2019)}
 
-#4.6) Pas besoin pour medecin parce que j'ai pas les dates d'entree en service des medecins, du coup un plot serait questionnable pour voir l'evolution
-
-#4.7) Pas besoin pour les parcs, comme pour ecole
-
-#4.8) Pas besoin pour les supermarches comme pour ecole
 
 #4.9) Prix mediane appartement 100m2 
 fplotprixappart <- function(a){x <- PMedianeAppart100m2_00_17_OK[c(a),c(2:19)]
@@ -235,109 +235,119 @@ plot( tx,type="l", col="blue", lwd=2, xlab="Year", xaxt = "n", ylab="Nombre de p
 axis(1, at=1:20, labels=2000:2019)}
 
 
-##5) FONCTIONS POUR OBTENIR DONNEES VOULUES D'UNE COMMUNE A UNE CERTAINE ANNEE------------------------------------------------------
+##5) FONCTIONS POUR OBTENIR DONNEES VOULUES D'UNE COMMUNE EN DERNIERE ANNEE DISPONIBLE------------------------------------------------------
 #5.1) DI
-freturnDI <- function(a,b){x <- ratioDI[c(a),c(b)]
-return(x)
+freturnDI <- function(a){x <- ratioDI[c(a),19]
+cat("Depenses d'investissement de la commmune par habitant (2017) : ") 
+cat(x)
 }
-
 #5.2) Loyermoyen100m2 
-freturnloyer <- function(a,b){x <- Loyermoyen100m2_06_19_OK[c(a),c(b)]
-return(x)
+freturnloyer <- function(a){x <- Loyermoyen100m2_06_19_OK[c(a),15]
+cat("Loyer moyen d'un appartement de 100m2 (2019) : ") 
+cat(x)
 }
 
 #5.3) Ratio Ecole
 freturnecole <- function(a){x <- ratio_ecole[c(a), c(2)]
-return(x)
+cat("Nombre d'ecoles par km2 : ") 
+cat(x)
 }
 
 #5.4) Population
-freturnpopulation <- function(a,b){x <- NHabitants_OK[c(a),c(b)]
-return(x)
+freturnpopulation <- function(a){x <- NHabitants_OK[c(a),21]
+cat("Nombre d'habitants (2019) : ") 
+cat(x)
 }
 
 #5.5) Ratio Infraction pour 1000 habitants
-freturninfraction <- function(a,b){x <- ratioInfraction[c(a),c(b)]
-return(x)
+freturninfraction <- function(a){x <- ratioInfraction[c(a),13]
+cat("Nombre d'infractions du Code Penal pour 1000 habitants (2019) : ") 
+cat(x)
 }
 
 #5.6) Ratio Medecin (pour 1000 habitants)
 freturnmedecin <- function(a){x <- ratioMedecins[c(a), c(2)]
-return(x)
+cat("Nombre de medecins pour 1000 habitants : ") 
+cat(x)
 }
 
 #5.7) Ratio Parc
 freturnparc <- function(a){x <- ratio_NParcs[c(a), c(2)]
-return(x)
+cat("Nombre de parcs par km2 : ") 
+cat(x)
 }
 
 #5.8) Ratio Supermarche
 freturnsupermarche <- function(a){x <- ratio_Supermarches[c(a), c(2)]
-return(x)
+cat("Nombre de supermarches par km2 : ") 
+cat(x)
 }
 
 #5.9) Prix mediane appartement 100m2 
-freturnprixappart <- function(a,b){x <- PMedianeAppart100m2_00_17_OK[c(a),c(b)]
-return(x)
+freturnprixappart <- function(a){x <- PMedianeAppart100m2_00_17_OK[c(a),19]
+cat("Prix mediane d'un appartement de 100m2 (2017) : ") 
+cat(x)
 }
 
 #5.10) Prix mediane Villa
-freturnprixvilla <- function(a,b){x <- PMedianeVilla_00_17_OK[c(a),c(b)]
-return(x)
+freturnprixvilla <- function(a){x <- PMedianeVilla_00_17_OK[c(a),19]
+cat("Prix mediane d'une villa (Taille inconnue, 2017) : ") 
+cat(x)
 }
 
 #5.11) Densite population 
-freturndensitepopulation <- function(a,b){x <- Densite_population[c(a),c(b)]
-return(x)
+freturndensitepopulation <- function(a){x <- Densite_population[c(a),21]
+cat("Nombre d'habitants par km2 (2019) : ") 
+cat(x)
 }
 
 #5.12) Superficie km2
-freturnsuperficie <- function(a){x <- ratio_ecole[c(a), c(2)]
-return(x)
+freturnsuperficie <- function(a){x <- Superficie_OK[c(a), c(2)]
+cat("Superficie de la commune en km2 : ") 
+cat(x)
 }
 
 ##6) CLEAN USELESS DATA------------------------------------------------------
 rm(Commune, DepensesInvestiss_00_17,NEcolePrimaire, NInfractions_08_19, NMedecins, NParcs, NSupermarches, NHabitants_00_19)
 
 
-##7) LISTE FONCTIONS-------------------------------------------
-fplotratioDI("Geneve")
+##7) LISTE FONCTIONS FINALES-------------------------------------------
+fpopulation <- function(a){
+cat(freturnpopulation(a))
+fplotpopulation(a)
+cat(freturndensitepopulation(a))
+fplotdensitepopulation(a)
+cat(freturnsuperficie(a))
+}
 
-fplotloyer("Geneve")
+fimmobilier <- function(a){
+cat(freturnloyer(a))
+fplotloyer(a)
+cat(freturnprixappart(a))
+fplotprixappart(a)
+cat(freturnprixvilla(a))
+fplotprixvilla(a)
+}
 
-fplotpopulation("Geneve")
+fcommodite <- function(a){
+print(freturnsupermarche(a))
 
-fplotinfraction("Geneve")
+print(freturnecole(a))
 
-fplotprixappart("Geneve")
+cat(freturnparc(a))
+}
 
-fplotprixvilla("Geneve")
+fservice <- function(a){
+cat(freturninfraction(a))
+fplotinfraction(a)
+cat(freturnDI(a))
+fplotratioDI(a)
+cat(freturnmedecin(a))
+}
+##7.1) Examples
+fpopulation("Geneve")
+fimmobilier("Geneve")
+fcommodite("Geneve")
+fservice("Geneve")
 
-fplotdensitepopulation("Geneve")
-
-
-
-freturnDI("Geneve","2010")
-
-freturnloyer("Geneve","2010")
-
-freturnecole("Geneve")
-
-freturnpopulation("Geneve","2010")
-
-freturninfraction("Geneve","2010")
-
-freturnmedecin("Geneve")
-
-freturnparc("Geneve")
-
-freturnsupermarche("Geneve")
-
-freturnprixappart("Geneve","2010")
-
-freturnprixvilla("Geneve","2010")
-
-freturndensitepopulation("Geneve","2010")
-
-freturnsuperficie("Geneve")
-
+```
