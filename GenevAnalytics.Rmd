@@ -1,3 +1,4 @@
+```{r}
 rm(list = ls())
 
 
@@ -329,10 +330,10 @@ fplotprixvilla(a)
 }
 
 fcommodite <- function(a){
-cat(freturnsupermarche(a))
-cat("  ")
-cat(freturnecole(a))
-cat("  ")
+print(freturnsupermarche(a))
+
+print(freturnecole(a))
+
 cat(freturnparc(a))
 }
 
@@ -349,3 +350,4 @@ fimmobilier("Geneve")
 fcommodite("Geneve")
 fservice("Geneve")
 
+```
