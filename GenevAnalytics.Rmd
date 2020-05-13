@@ -353,7 +353,8 @@ fservice("Geneve")
 ```
 
 
-```{r}
+```{r} 
+#Leaflet example for Matthias
 library(leaflet)
 library(htmltools)
 
@@ -372,3 +373,13 @@ m <- leaflet() %>%
 
 m
 ```
+
+##Latitude longitude dataframe for Matthias 
+latlon<- Latitude_Longitude[,-1]
+rownames(latlon) <- Latitude_Longitude[,1]
+
+freturnlatlon <- function(a){x <- latlon[c(a),]
+return(x)
+}
+#Example
+freturnlatlon("Geneve")
