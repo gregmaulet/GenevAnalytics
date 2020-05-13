@@ -351,3 +351,24 @@ fcommodite("Geneve")
 fservice("Geneve")
 
 ```
+
+
+```{r}
+library(leaflet)
+library(htmltools)
+
+city <- c("Onex")
+
+lat = c(46.1833)
+lon = c(6.1)
+HW2table = data.frame(cbind(lat, lon))
+
+table2 <- c("Onex")
+
+m <- leaflet() %>%
+  addTiles() %>%  
+  addPopups(lng = HW2table$lon, lat = HW2table$lat, table2 , options = popupOptions(closeButton=FALSE)) %>%
+  addCircleMarkers(lng=HW2table$lon, lat=HW2table$lat,radius = HW2table$Champions)
+
+m
+```
