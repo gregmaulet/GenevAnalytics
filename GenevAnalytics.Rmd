@@ -51,7 +51,7 @@ Superficie %>% head()
 ###2.0)DIVERS---------------------------------------
 #Vector of Commune names
 x <- c("NA","Aire-la-Ville","Anieres", "Avully", "Avusy",
-       " Bardonnex","Bellevue","Bernex","Carouge", "Cartigny",
+       "Bardonnex","Bellevue","Bernex","Carouge", "Cartigny",
        "Celigny", "Chancy",  "Chene-Bougeries", "Chene-Bourg",
        "Choulex","Collex-Bossy","Collonge-Bellerive","Cologny",
        "Confignon","Corsier","Dardagny","Geneve","Genthod",
