@@ -426,8 +426,9 @@ m
 ```
 
 ##Latitude longitude dataframe for Matthias 
-latlon <- Latitude_Longitude[,-1]
-rownames(latlon) <- Latitude_Longitude[,1]
+latlon0  <- as.data.frame(cities_coordinates)
+latlon <- latlon0[,-1]
+rownames(latlon) <- latlon0[,1]
 
 freturnlatlon <- function(a){x <- latlon[c(a),]
 return(x)
@@ -435,7 +436,7 @@ return(x)
 #Example
 freturnlatlon("Geneve")
 
-##Fonction pour automatiser leaflet. Besoin de chunk sinon ?a fait rien et le processeur de l'ordi fait n'imp
+##Fonction pour automatiser leaflet. Besoin de chunk sinon ?a fait rien et le processeur de l'ordi fait n'imp. MAJ : ne marche plus  !!
 ```{r}
 library(leaflet)
 library(htmltools)
@@ -457,5 +458,4 @@ m
 }
 experiment("Vernier")
 ```
-
 
