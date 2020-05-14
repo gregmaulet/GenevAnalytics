@@ -298,7 +298,7 @@ return(round(x, digits = 2))
 }
 
 ##6) CLEAN USELESS DATA------------------------------------------------------
-rm(Commune, DepensesInvestiss_00_17,NEcolePrimaire, NInfractions_08_19, NMedecins, NParcs, NSupermarches, NHabitants_00_19)
+#rm(Commune, DepensesInvestiss_00_17,NEcolePrimaire, NInfractions_08_19, NMedecins, NParcs, NSupermarches, NHabitants_00_19)
 
 
 ##7) LISTE FONCTIONS FINALES-------------------------------------------
