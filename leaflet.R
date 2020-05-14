@@ -10,10 +10,10 @@ library(rgdal)
 library(jsonlite)
 library(shiny)
 library(plyr)
+library(dplyr)
 library(data.table)
 
 #INFRACTIONS DATA MODELLING 
-library(dplyr)
 NInfractions_08_19=NInfractions_08_19 %>%dplyr::rename(city=`...1`)
 NInfractions_08_19=NInfractions_08_19[-1,]
 NInfractions_19=NInfractions_08_19 %>%dplyr::select(city,`2019`)
@@ -44,6 +44,34 @@ class(medecins$lat)
 medecins$lat= as.numeric(medecins$lat)
 class(medecins$lat)
 
+#ECOLES PRIMAIRES DATA MODELLING 
+NEcolePrimaire=NEcolePrimaire %>% dplyr::rename(city=`...1`)
+NEcolePrimaire=NEcolePrimaire[-1,-2]
+ecoles <- merge(NEcolePrimaire, cities_coordinates)
+ecoles = as.data.frame(ecoles)
+ecoles=ecoles %>% dplyr::rename(nb_ecole=Necole)
+ecoles$lng= as.character(ecoles$lng)
+class(ecoles$lng)
+ecoles$lng= as.numeric(ecoles$lng)
+class(ecoles$lng)
+ecoles$lat= as.character(ecoles$lat)
+class(ecoles$lat)
+ecoles$lat= as.numeric(ecoles$lat)
+class(ecoles$lat)
+
+#HABITANTS DATA MODELLING 
+NHabitants_00_19=NHabitants_00_19 %>% dplyr::rename(city=`...1`)
+NHabitants_00_19=NHabitants_00_19[-1,-2]
+NHabitants_00_19=NHabitants_00_19 %>%dplyr::select(city,`2019`)
+hab <- merge(NHabitants_00_19, cities_coordinates)
+hab = as.data.frame(hab)
+hab=hab %>% dplyr::rename(nb_hab=`2019`)
+hab$lng= as.character(hab$lng)
+hab$lng= as.numeric(hab$lng)
+class(hab$lng)
+hab$lat= as.character(hab$lat)
+hab$lat= as.numeric(hab$lat)
+class(hab$lat)
 
 # SHINY STRUCTURE
 ui <- fluidPage(
@@ -85,7 +113,26 @@ colors_medecins <- colorQuantile("YlOrRd", medecins$nb_medecins, n=2)
 m %>% addCircleMarkers(lng = ~lng, lat = ~lat, color = ~colors_medecins(nb_medecins) ,radius = ~sqrt(nb_medecins), label = ~paste(city, ":", nb_medecins), fillOpacity = 0.8)
 
 
+#LEAFLET ECOLES 
+m <- leaflet() %>% addTiles()
+m <- leaflet(ecoles) %>% 
+  setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
+  fitBounds(m, lng1=5.932896, lat1=46.311005, lng2=6.319477, lat2=46.128334) %>%
+  addTiles() %>%
+  addMeasure() 
+colors_ecoles <- colorNumeric("YlOrRd", ecoles$nb_ecole, n=2)
+m %>% addCircleMarkers(lng = ~lng, lat = ~lat, color = ~colors_ecoles(nb_ecole) ,radius = ~nb_ecole, label = ~paste(city, ":", nb_ecole), fillOpacity = 0.8)
 
+
+#LEAFLET HABITANTS 
+m <- leaflet() %>% addTiles()
+m <- leaflet(hab) %>% 
+  setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
+  fitBounds(m, lng1=5.932896, lat1=46.311005, lng2=6.319477, lat2=46.128334) %>%
+  addTiles() %>%
+  addMeasure() 
+colors_hab <- colorQuantile("YlOrRd", hab$nb_hab, n=2)
+m %>% addCircleMarkers(lng = ~lng, lat = ~lat, color = ~colors_hab(nb_hab) ,radius = ~sqrt(nb_hab)/10, label = ~paste(city, ":", nb_hab), fillOpacity = 0.8)
 
 
 
