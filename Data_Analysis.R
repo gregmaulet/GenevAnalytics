@@ -4,6 +4,10 @@ options(scipen=999)
 
 library(dplyr)
 
+data("Latitude_Longitude")
+ls()
+Latitude_Longitude %>% head()
+
 data("DepensesInvestiss_00_17")
 ls()
 DepensesInvestiss_00_17 %>% head()
