@@ -91,6 +91,8 @@ server <- function(input, output, session) {
 
 shinyApp(ui, server)
 
+
+
 #LEAFLET INFRACTIONS 
 m <- leaflet() %>% addTiles()
 m <- leaflet(infractions) %>% 
@@ -133,6 +135,15 @@ m <- leaflet(hab) %>%
   addMeasure() 
 colors_hab <- colorQuantile("YlOrRd", hab$nb_hab, n=2)
 m %>% addCircleMarkers(lng = ~lng, lat = ~lat, color = ~colors_hab(nb_hab) ,radius = ~sqrt(nb_hab)/10, label = ~paste(city, ":", nb_hab), fillOpacity = 0.8)
+
+
+
+
+
+
+
+
+
 
 
 
