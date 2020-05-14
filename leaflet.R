@@ -7,17 +7,13 @@ library(sp)
 library(htmltools)
 library(htmlwidgets)
 library(rgdal)
-library(ggplot2)
 library(jsonlite)
-library(data.table)
 library(dplyr)
-library(ggpubr)
-library(grid)
-#install.packages("tigris")
-library(tigris)
+library(shiny)
+library(plyr)
+library(data.table)
 
-
-
+#INFRACTIONS DATA MODELLING 
 NInfractions_08_19=NInfractions_08_19 %>%rename(city=`...1`)
 NInfractions_08_19=NInfractions_08_19[-1,]
 NInfractions_19=NInfractions_08_19 %>%select(city,`2019`)
@@ -35,6 +31,31 @@ class(infractions$Lat)
 infractions$Lat= as.numeric(infractions$Lat)
 class(infractions$Lat)
 
+#MEDECINS DATA MODELLING 
+NMedecins=NMedecins %>%rename(city=`...1`)
+NMedecins=NMedecins[-1,-2]
+medecins <- merge(NMedecins, cities_coordinates)
+
+
+# SHINY STRUCTURE
+ui <- fluidPage(
+  
+  leafletOutput("mymap"),
+  
+)
+
+server <- function(input, output, session) {
+  
+  
+  output$mymap <- renderLeaflet({
+    leaflet() %>%
+      etc. 
+  })
+}
+
+shinyApp(ui, server)
+
+#LEAFLET INFRACTIONS 
 m <- leaflet() %>% addTiles()
 m <- leaflet(infractions) %>% 
   setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
@@ -49,10 +70,16 @@ m %>% addCircleMarkers(lng = ~Lng, lat = ~Lat, radius = ~sqrt(data)/4, color = ~
 
 
 
-###  WAY 1 ###
+
+
+### LEAFLET WITH POLYGONS TRIAL ###
+
+cities_bound <- geojsonio::geojson_read("https://github.com/gregmaulet/GenevAnalytics/blob/master/geneva_municipalities_boundaries.geojson", what="sp")
 
 cities_bound <- geojsonio::geojson_read("Desktop/GenevAnalytics/geneva_municipalities_boundaries.geojson", what="sp")
-#"geneva_municipalities_boundaries.geojson" is made from the swiss municipalties boundaries open data json file and selected with QGIS, because the canton data from SITG open data was not working  
+# "geneva_municipalities_boundaries.geojson" is made from the swiss municipalties boundaries open data json file 
+# and selected with QGIS, because the canton data from SITG open data was not working  
+
 m <- leaflet()
 m <- leaflet(cities_bound) %>% 
   setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
@@ -60,10 +87,8 @@ m <- leaflet(cities_bound) %>%
   addTiles() %>%
   addMeasure() 
 m %>% addPolygons()
-
-pal <- colorNumeric("YlOrRd", domain = infractions$`NInfractions_08_19$`2019`[2:46]`)
+pal <- colorQuantile("YlOrRd", domain = infractions$data)
 labels <- sprintf(NInfractions_08_19$city, NInfractions_08_19$`2019`) %>% lapply(htmltools::HTML)
-
 m %>% addPolygons(
   fillColor = ~pal(NInfractions_08_19$`2019`),
   weight = 2,
@@ -82,9 +107,9 @@ m %>% addPolygons(
     textsize = "15px",
     direction = "auto"))
 
-# to avoid the problem of misplacement on the map, we try to integrate separated data to the json file. It will be 
-
+# to avoid the problem of misplacement on the map, we tried to integrate separated data to the json file. 
 infractions <- geo_join(cities_bound@data, NInfractions_19, "name", "NInfraction_19$city")
-
+# This function has no error message, but no effect. After hours of research, we didn't find a solution 
+# either replace the cities or to combine ou NInfractions dataframe with the json file. 
 
 
