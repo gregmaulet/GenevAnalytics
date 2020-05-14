@@ -49,20 +49,15 @@ class(medecins$lat)
 medecins$lat= as.numeric(medecins$lat)
 class(medecins$lat)
 
-#ECOLES PRIMAIRES DATA MODELLING 
-NEcolePrimaire=NEcolePrimaire %>% dplyr::rename(city=`...1`)
-NEcolePrimaire=NEcolePrimaire[-1,-2]
-ecoles <- merge(NEcolePrimaire, cities_coordinates)
-ecoles = as.data.frame(ecoles)
-ecoles=ecoles %>% dplyr::rename(nb_ecole=Necole)
-ecoles$lng= as.character(ecoles$lng)
-class(ecoles$lng)
-ecoles$lng= as.numeric(ecoles$lng)
-class(ecoles$lng)
-ecoles$lat= as.character(ecoles$lat)
-class(ecoles$lat)
-ecoles$lat= as.numeric(ecoles$lat)
-class(ecoles$lat)
+#MEDECINS / 1000 INHAB. DATA MODELLING 
+setDT(ratioMedecins, keep.rownames = TRUE)[]
+ratioMedecins=ratioMedecins %>% dplyr::rename(city=rn)
+ratioMedecins=ratioMedecins[-1,-2]
+medecins_for_1000_inhab <- merge(ratioMedecins, cities_coordinates)
+medecins_for_1000_inhab = as.data.frame(medecins_for_1000_inhab)
+medecins_for_1000_inhab=medecins_for_1000_inhab %>% dplyr::rename(nb_medecins_for_1000_inhab=NMedecins)
+class(medecins_for_1000_inhab$lat)
+class(medecins_for_1000_inhab$lng)
 
 #ECOLES PRIMAIRES DATA MODELLING 
 NEcolePrimaire=NEcolePrimaire %>% dplyr::rename(city=`...1`)
@@ -79,7 +74,7 @@ class(ecoles$lat)
 ecoles$lat= as.numeric(ecoles$lat)
 class(ecoles$lat)
 
-#HABITANTS DATA MODELLING 
+#INHABITANTS DATA MODELLING 
 NHabitants_00_19=NHabitants_00_19 %>% dplyr::rename(city=`...1`)
 NHabitants_00_19=NHabitants_00_19[-1,-2]
 NHabitants_00_19=NHabitants_00_19 %>%dplyr::select(city,`2019`)
@@ -117,7 +112,7 @@ superficie$lng= as.numeric(superficie$lng)
 superficie$lat= as.character(superficie$lat)
 superficie$lat= as.numeric(superficie$lat)
 
-#INVESTMENT SPENDING / HAB. DATA MODELLING
+#INVESTMENT SPENDING / INHAB. DATA MODELLING
 setDT(ratioDI, keep.rownames = TRUE)[]
 ratioDI=ratioDI %>%dplyr::rename(city=rn)
 ratioDI=ratioDI[-1,-2]
@@ -195,6 +190,37 @@ m %>% addPolygons(
 
 
 
+###  LEAFLET MEDECINS / 1000 INHAB.  ####
+
+m <- leaflet()
+m <- leaflet(cities_bound) %>% 
+  setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
+  fitBounds(m, lng1=5.932896, lat1=46.311005, lng2=6.319477, lat2=46.128334) %>%
+  addTiles() %>%
+  addMeasure() 
+m %>% addPolygons()
+pal <- colorQuantile("YlOrRd", domain = medecins_for_1000_inhab$nb_medecins_for_1000_inhab, n=2)
+m %>% addPolygons(
+  fillColor = ~pal(medecins_for_1000_inhab$nb_medecins_for_1000_inhab), 
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "3",
+  fillOpacity = 0.7,highlight = highlightOptions(
+    weight = 5,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  label = paste(medecins_for_1000_inhab$city, ":", medecins_for_1000_inhab$nb_medecins_for_1000_inhab, "doctors / 1000 inhab."),
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto"))
+
+
+
+
 ###  LEAFLET ECOLES  ####
 
 m <- leaflet()
@@ -225,7 +251,7 @@ m %>% addPolygons(
 
 
 
-###  LEAFLET HABITANTS  ####
+###  LEAFLET INHABITANTS  ####
 
 m <- leaflet()
 m <- leaflet(cities_bound) %>% 
@@ -337,7 +363,7 @@ m %>% addPolygons(
     dashArray = "",
     fillOpacity = 0.7,
     bringToFront = TRUE),
-  label = paste(di$city, ":", di$DI, "CHF spent by the municipality / hab."),
+  label = paste(di$city, ":", di$DI, "CHF spent by the municipality / inhab."),
   labelOptions = labelOptions(
     style = list("font-weight" = "normal", padding = "3px 8px"),
     textsize = "15px",
