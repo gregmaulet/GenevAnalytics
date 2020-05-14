@@ -17,6 +17,8 @@ source("Data_Analysis.R")
 cities_coordinates=Latitude_Longitude
 cities_coordinates=cities_coordinates %>% dplyr::rename(city=`...1`)
 cities_coordinates=cities_coordinates %>% dplyr::rename(lng=lon)
+cities_bound <- geojsonio::geojson_read("geneva_municipalities_boundaries.geojson", what="sp")
+
 
 #INFRACTIONS DATA MODELLING 
 NInfractions_08_19=NInfractions_08_19 %>%dplyr::rename(city=`...1`)
@@ -33,6 +35,17 @@ infractions$lat= as.character(infractions$lat)
 class(infractions$lat)
 infractions$lat= as.numeric(infractions$lat)
 class(infractions$lat)
+
+#INFRACTIONS / 1000 INHAB. DATA MODELLING 
+setDT(ratioInfraction, keep.rownames = TRUE)[]
+ratioInfraction=ratioInfraction %>%dplyr::rename(city=rn)
+ratioInfraction=ratioInfraction[-1,-2]
+ratioInfraction=ratioInfraction %>%dplyr::select(city,`2019`)
+infractions_for_1000_inhab <- merge(ratioInfraction, cities_coordinates)
+infractions_for_1000_inhab = as.data.frame(infractions_for_1000_inhab)
+infractions_for_1000_inhab=infractions_for_1000_inhab %>% dplyr::rename(inf=`2019`)
+class(infractions_for_1000_inhab$lat)
+class(infractions_for_1000_inhab$lng)
 
 #MEDECINS DATA MODELLING 
 NMedecins=NMedecins %>% dplyr::rename(city=`...1`)
@@ -129,8 +142,6 @@ di = as.data.frame(di)
 
 ### LEAFLET INFRACTIONS ###
 
-cities_bound <- geojsonio::geojson_read("geneva_municipalities_boundaries.geojson", what="sp")
-
 m <- leaflet()
 m <- leaflet(cities_bound) %>% 
   setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
@@ -157,6 +168,34 @@ m %>% addPolygons(
     textsize = "15px",
     direction = "auto"))
 
+
+###  LEAFLET INFRACTIONS / 1000 INHAB. ###
+
+m <- leaflet()
+m <- leaflet(cities_bound) %>% 
+  setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
+  fitBounds(m, lng1=5.932896, lat1=46.311005, lng2=6.319477, lat2=46.128334) %>%
+  addTiles() %>%
+  addMeasure() 
+m %>% addPolygons()
+pal <- colorQuantile("YlOrRd", domain = infractions_for_1000_inhab$inf)
+m %>% addPolygons(
+  fillColor = ~pal(infractions_for_1000_inhab$inf), 
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "3",
+  fillOpacity = 0.7,highlight = highlightOptions(
+    weight = 5,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  label = paste(infractions_for_1000_inhab$city, ":", infractions_for_1000_inhab$inf, "violations / 1000 inhab."),
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto"))
 
 
 
