@@ -64,6 +64,21 @@ class(ecoles$lat)
 ecoles$lat= as.numeric(ecoles$lat)
 class(ecoles$lat)
 
+#ECOLES PRIMAIRES DATA MODELLING 
+NEcolePrimaire=NEcolePrimaire %>% dplyr::rename(city=`...1`)
+NEcolePrimaire=NEcolePrimaire[-1,-2]
+ecoles <- merge(NEcolePrimaire, cities_coordinates)
+ecoles = as.data.frame(ecoles)
+ecoles=ecoles %>% dplyr::rename(nb_ecole=Necole)
+ecoles$lng= as.character(ecoles$lng)
+class(ecoles$lng)
+ecoles$lng= as.numeric(ecoles$lng)
+class(ecoles$lng)
+ecoles$lat= as.character(ecoles$lat)
+class(ecoles$lat)
+ecoles$lat= as.numeric(ecoles$lat)
+class(ecoles$lat)
+
 #HABITANTS DATA MODELLING 
 NHabitants_00_19=NHabitants_00_19 %>% dplyr::rename(city=`...1`)
 NHabitants_00_19=NHabitants_00_19[-1,-2]
@@ -91,21 +106,28 @@ supermarkets$lng= as.numeric(supermarkets$lng)
 supermarkets$lat= as.character(supermarkets$lat)
 supermarkets$lat= as.numeric(supermarkets$lat)
 
-#SUPERFICIE DATA MODELLING 
-NInfractions_08_19=NInfractions_08_19 %>%dplyr::rename(city=`...1`)
-NInfractions_08_19=NInfractions_08_19[-1,-2]
-NInfractions_19=NInfractions_08_19 %>%dplyr::select(city,`2019`)
-infractions <- merge(NInfractions_19, cities_coordinates)
-infractions = as.data.frame(infractions)
-infractions=infractions %>% dplyr::rename(data=`2019`)
-infractions$lng= as.character(infractions$lng)
-class(infractions$lng)
-infractions$lng= as.numeric(infractions$lng)
-class(infractions$lng)
-infractions$lat= as.character(infractions$lat)
-class(infractions$lat)
-infractions$lat= as.numeric(infractions$lat)
-class(infractions$lat)
+#SUPERFICIE DATA MODELLING
+setDT(Superficie_OK, keep.rownames = TRUE)[]
+Superficie_OK=Superficie_OK %>%dplyr::rename(city=rn)
+Superficie_OK=Superficie_OK[-1,-2]
+superficie <- merge(Superficie_OK, cities_coordinates)
+superficie = as.data.frame(superficie)
+superficie$lng= as.character(superficie$lng)
+superficie$lng= as.numeric(superficie$lng)
+superficie$lat= as.character(superficie$lat)
+superficie$lat= as.numeric(superficie$lat)
+
+#INVESTMENT SPENDING / HAB. DATA MODELLING
+setDT(ratioDI, keep.rownames = TRUE)[]
+ratioDI=ratioDI %>%dplyr::rename(city=rn)
+ratioDI=ratioDI[-1,-2]
+ratioDI=ratioDI %>%dplyr::select(city,`2017`)
+ratioDI=ratioDI %>% dplyr::rename(DI=`2017`)
+di <- merge(ratioDI, cities_coordinates)
+di = as.data.frame(di)
+
+
+
 
 
 
@@ -255,11 +277,77 @@ m %>% addPolygons(
     dashArray = "",
     fillOpacity = 0.7,
     bringToFront = TRUE),
-  label = paste(supermarkets$city, ":", supermarkets$nb_supermarkets, "/Km^2"),
+  label = paste(supermarkets$city, ":", supermarkets$nb_supermarkets, "supermarkets /Km^2"),
   labelOptions = labelOptions(
     style = list("font-weight" = "normal", padding = "3px 8px"),
     textsize = "15px",
     direction = "auto"))
+
+
+
+###  LEAFLET SUPERFICIE  ####
+
+m <- leaflet()
+m <- leaflet(cities_bound) %>% 
+  setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
+  fitBounds(m, lng1=5.932896, lat1=46.311005, lng2=6.319477, lat2=46.128334) %>%
+  addTiles() %>%
+  addMeasure() 
+m %>% addPolygons()
+pal <- colorNumeric("YlOrRd", domain = superficie$km2)
+m %>% addPolygons(
+  fillColor = ~pal(superficie$km2), 
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "3",
+  fillOpacity = 0.7,highlight = highlightOptions(
+    weight = 5,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  label = paste(superficie$city, ":", superficie$km2, "Km^2"),
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto"))
+
+
+
+###  LEAFLET INVESTMENT SPENDING / HAB.  ####
+
+m <- leaflet()
+m <- leaflet(cities_bound) %>% 
+  setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
+  fitBounds(m, lng1=5.932896, lat1=46.311005, lng2=6.319477, lat2=46.128334) %>%
+  addTiles() %>%
+  addMeasure() 
+m %>% addPolygons()
+pal <- colorQuantile("YlOrRd", domain = di$DI)
+m %>% addPolygons(
+  fillColor = ~pal(di$DI), 
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "3",
+  fillOpacity = 0.7,highlight = highlightOptions(
+    weight = 5,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  label = paste(di$city, ":", di$DI, "CHF spent by the municipality / hab."),
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto"))
+
+
+
+
+
+
 
 
 
