@@ -315,6 +315,8 @@ server <- function(input, output) {
     ratioDI=ratioDI %>% dplyr::rename(DI=`2017`)
     di <- merge(ratioDI, cities_coordinates)
     di = as.data.frame(di)
+
+    source("Data_Analysis.R")
     
     
     cities_bound <- geojsonio::geojson_read("geneva_municipalities_boundaries.geojson", what="sp")

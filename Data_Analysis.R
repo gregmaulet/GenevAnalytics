@@ -1,5 +1,4 @@
 
-rm(list = ls())
 options(scipen=999)
 
 library(dplyr)
@@ -193,6 +192,7 @@ Superficieprov <- head(cbind(Commune, Superficie), 46)
 Superficie_OK <- Superficieprov[,-1]
 rownames(Superficie_OK) <- Superficieprov[,1]
 rm(Superficie, Superficieprov)
+
 ###4.0) FONCTIONS PLOT------------------------------
 #4.1) DI (funratioDIplot("nom de la commune")) & examples
 fplotratioDI <- function(a){x <- ratioDI[c(a),c(2:19)]
