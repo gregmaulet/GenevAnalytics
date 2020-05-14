@@ -8,33 +8,41 @@ library(htmltools)
 library(htmlwidgets)
 library(rgdal)
 library(jsonlite)
-library(dplyr)
 library(shiny)
 library(plyr)
 library(data.table)
 
 #INFRACTIONS DATA MODELLING 
-NInfractions_08_19=NInfractions_08_19 %>%rename(city=`...1`)
+library(dplyr)
+NInfractions_08_19=NInfractions_08_19 %>%dplyr::rename(city=`...1`)
 NInfractions_08_19=NInfractions_08_19[-1,]
-NInfractions_19=NInfractions_08_19 %>%select(city,`2019`)
+NInfractions_19=NInfractions_08_19 %>%dplyr::select(city,`2019`)
 infractions <- merge(NInfractions_19, cities_coordinates)
 infractions = as.data.frame(infractions)
-infractions=infractions %>% rename(data=`2019`)
-infractions=infractions %>% rename(Lat=lat)
-infractions=infractions %>% rename(Lng=lng)
-infractions$Lng= as.character(infractions$Lng)
-class(infractions$Lng)
-infractions$Lng= as.numeric(infractions$Lng)
-class(infractions$Lng)
-infractions$Lat= as.character(infractions$Lat)
-class(infractions$Lat)
-infractions$Lat= as.numeric(infractions$Lat)
-class(infractions$Lat)
+infractions=infractions %>% dplyr::rename(data=`2019`)
+infractions$lng= as.character(infractions$lng)
+class(infractions$lng)
+infractions$lng= as.numeric(infractions$lng)
+class(infractions$lng)
+infractions$lat= as.character(infractions$lat)
+class(infractions$lat)
+infractions$lat= as.numeric(infractions$lat)
+class(infractions$lat)
 
 #MEDECINS DATA MODELLING 
-NMedecins=NMedecins %>%rename(city=`...1`)
+NMedecins=NMedecins %>% dplyr::rename(city=`...1`)
 NMedecins=NMedecins[-1,-2]
 medecins <- merge(NMedecins, cities_coordinates)
+medecins = as.data.frame(medecins)
+medecins=medecins %>% dplyr::rename(nb_medecins=NMedecins)
+medecins$lng= as.character(medecins$lng)
+class(medecins$lng)
+medecins$lng= as.numeric(medecins$lng)
+class(medecins$lng)
+medecins$lat= as.character(medecins$lat)
+class(medecins$lat)
+medecins$lat= as.numeric(medecins$lat)
+class(medecins$lat)
 
 
 # SHINY STRUCTURE
@@ -62,10 +70,19 @@ m <- leaflet(infractions) %>%
   fitBounds(m, lng1=5.932896, lat1=46.311005, lng2=6.319477, lat2=46.128334) %>%
   addTiles() %>%
   addMeasure() 
-colors <- colorQuantile("YlOrRd", infractions$data)
-m %>% addCircleMarkers(lng = ~Lng, lat = ~Lat, radius = ~sqrt(data)/4, color = ~colors(data), label = ~paste(city, ":", data), fillOpacity = 0.8)
+colors_infractions <- colorQuantile("YlOrRd", infractions$data)
+m %>% addCircleMarkers(lng = ~lng, lat = ~lat, radius = ~sqrt(data)/4, color = ~colors_infractions(data), label = ~paste(city, ":", data), fillOpacity = 0.8)
 
 
+#LEAFLET MEDECINS 
+m <- leaflet() %>% addTiles()
+m <- leaflet(medecins) %>% 
+  setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
+  fitBounds(m, lng1=5.932896, lat1=46.311005, lng2=6.319477, lat2=46.128334) %>%
+  addTiles() %>%
+  addMeasure() 
+colors_medecins <- colorQuantile("YlOrRd", medecins$nb_medecins, n=2)
+m %>% addCircleMarkers(lng = ~lng, lat = ~lat, color = ~colors_medecins(nb_medecins) ,radius = ~sqrt(nb_medecins), label = ~paste(city, ":", nb_medecins), fillOpacity = 0.8)
 
 
 
