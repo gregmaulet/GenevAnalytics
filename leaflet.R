@@ -13,6 +13,10 @@ library(plyr)
 library(dplyr)
 library(data.table)
 
+cities_coordinates=Latitude_Longitude
+cities_coordinates=cities_coordinates %>% dplyr::rename(city=`...1`)
+cities_coordinates=cities_coordinates %>% dplyr::rename(lng=lon)
+
 #INFRACTIONS DATA MODELLING 
 NInfractions_08_19=NInfractions_08_19 %>%dplyr::rename(city=`...1`)
 NInfractions_08_19=NInfractions_08_19[-1,]
@@ -72,6 +76,8 @@ class(hab$lng)
 hab$lat= as.character(hab$lat)
 hab$lat= as.numeric(hab$lat)
 class(hab$lat)
+
+
 
 # SHINY STRUCTURE
 ui <- fluidPage(
@@ -133,7 +139,7 @@ m <- leaflet(hab) %>%
   fitBounds(m, lng1=5.932896, lat1=46.311005, lng2=6.319477, lat2=46.128334) %>%
   addTiles() %>%
   addMeasure() 
-colors_hab <- colorQuantile("YlOrRd", hab$nb_hab, n=2)
+colors_hab <- colorQuantile("YlOrRd", hab$nb_hab)
 m %>% addCircleMarkers(lng = ~lng, lat = ~lat, color = ~colors_hab(nb_hab) ,radius = ~sqrt(nb_hab)/10, label = ~paste(city, ":", nb_hab), fillOpacity = 0.8)
 
 
