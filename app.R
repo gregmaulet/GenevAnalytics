@@ -316,6 +316,7 @@ server <- function(input, output) {
     di <- merge(ratioDI, cities_coordinates)
     di = as.data.frame(di)
 
+    # Reload once fresh data sets 
     source("Data_Analysis.R")
     
     
