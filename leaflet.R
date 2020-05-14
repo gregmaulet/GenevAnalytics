@@ -20,7 +20,7 @@ cities_coordinates=cities_coordinates %>% dplyr::rename(lng=lon)
 
 #INFRACTIONS DATA MODELLING 
 NInfractions_08_19=NInfractions_08_19 %>%dplyr::rename(city=`...1`)
-NInfractions_08_19=NInfractions_08_19[-1,]
+NInfractions_08_19=NInfractions_08_19[-1,-2]
 NInfractions_19=NInfractions_08_19 %>%dplyr::select(city,`2019`)
 infractions <- merge(NInfractions_19, cities_coordinates)
 infractions = as.data.frame(infractions)
@@ -78,25 +78,198 @@ hab$lat= as.character(hab$lat)
 hab$lat= as.numeric(hab$lat)
 class(hab$lat)
 
+#SUPERMARKETS / KM^2 DATA MODELLING 
+setDT(ratio_Supermarches, keep.rownames = TRUE)[]
+ratio_Supermarches=ratio_Supermarches %>%dplyr::rename(city=rn)
+ratio_Supermarches=ratio_Supermarches[-1,-2]
+ratio_Supermarches=ratio_Supermarches %>%dplyr::select(city,"Total Super")
+supermarkets <- merge(ratio_Supermarches, cities_coordinates)
+supermarkets = as.data.frame(supermarkets)
+supermarkets=supermarkets %>% dplyr::rename(nb_supermarkets="Total Super")
+supermarkets$lng= as.character(supermarkets$lng)
+supermarkets$lng= as.numeric(supermarkets$lng)
+supermarkets$lat= as.character(supermarkets$lat)
+supermarkets$lat= as.numeric(supermarkets$lat)
+
+#SUPERFICIE DATA MODELLING 
+NInfractions_08_19=NInfractions_08_19 %>%dplyr::rename(city=`...1`)
+NInfractions_08_19=NInfractions_08_19[-1,-2]
+NInfractions_19=NInfractions_08_19 %>%dplyr::select(city,`2019`)
+infractions <- merge(NInfractions_19, cities_coordinates)
+infractions = as.data.frame(infractions)
+infractions=infractions %>% dplyr::rename(data=`2019`)
+infractions$lng= as.character(infractions$lng)
+class(infractions$lng)
+infractions$lng= as.numeric(infractions$lng)
+class(infractions$lng)
+infractions$lat= as.character(infractions$lat)
+class(infractions$lat)
+infractions$lat= as.numeric(infractions$lat)
+class(infractions$lat)
 
 
-# SHINY STRUCTURE
-ui <- fluidPage(
-  
-  leafletOutput("mymap"),
-  
-)
 
-server <- function(input, output, session) {
-  
-  
-  output$mymap <- renderLeaflet({
-    leaflet() %>%
-      etc. 
-  })
-}
 
-shinyApp(ui, server)
+### LEAFLET INFRACTIONS ###
+
+cities_bound <- geojsonio::geojson_read("geneva_municipalities_boundaries.geojson", what="sp")
+
+m <- leaflet()
+m <- leaflet(cities_bound) %>% 
+  setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
+  fitBounds(m, lng1=5.932896, lat1=46.311005, lng2=6.319477, lat2=46.128334) %>%
+  addTiles() %>%
+  addMeasure() 
+m %>% addPolygons()
+pal <- colorQuantile("YlOrRd", domain = infractions$data)
+m %>% addPolygons(
+  fillColor = ~pal(NInfractions_08_19$`2019`), 
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "3",
+  fillOpacity = 0.7,highlight = highlightOptions(
+    weight = 5,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  label = paste(infractions$city, ":", infractions$data),
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto"))
+
+
+
+
+###  LEAFLET MEDECINS  ####
+
+m <- leaflet()
+m <- leaflet(cities_bound) %>% 
+  setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
+  fitBounds(m, lng1=5.932896, lat1=46.311005, lng2=6.319477, lat2=46.128334) %>%
+  addTiles() %>%
+  addMeasure() 
+m %>% addPolygons()
+pal <- colorQuantile("YlOrRd", domain = medecins$nb_medecins, n=2)
+m %>% addPolygons(
+  fillColor = ~pal(medecins$nb_medecins), 
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "3",
+  fillOpacity = 0.7,highlight = highlightOptions(
+    weight = 5,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  label = paste(medecins$city, ":", medecins$nb_medecins),
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto"))
+
+
+
+###  LEAFLET ECOLES  ####
+
+m <- leaflet()
+m <- leaflet(cities_bound) %>% 
+  setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
+  fitBounds(m, lng1=5.932896, lat1=46.311005, lng2=6.319477, lat2=46.128334) %>%
+  addTiles() %>%
+  addMeasure() 
+m %>% addPolygons()
+pal <- colorNumeric("YlOrRd", domain = ecoles$nb_ecole)
+m %>% addPolygons(
+  fillColor = ~pal(ecoles$nb_ecole), 
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "3",
+  fillOpacity = 0.7,highlight = highlightOptions(
+    weight = 5,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  label = paste(ecoles$city, ":", ecoles$nb_ecole),
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto"))
+
+
+
+###  LEAFLET HABITANTS  ####
+
+m <- leaflet()
+m <- leaflet(cities_bound) %>% 
+  setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
+  fitBounds(m, lng1=5.932896, lat1=46.311005, lng2=6.319477, lat2=46.128334) %>%
+  addTiles() %>%
+  addMeasure() 
+m %>% addPolygons()
+pal <- colorQuantile("YlOrRd", domain = hab$nb_hab)
+m %>% addPolygons(
+  fillColor = ~pal(hab$nb_hab), 
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "3",
+  fillOpacity = 0.7,highlight = highlightOptions(
+    weight = 5,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  label = paste(hab$city, ":", hab$nb_hab),
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto"))
+
+
+
+###  LEAFLET SUPERMARKETS / KM^2  ####
+
+m <- leaflet()
+m <- leaflet(cities_bound) %>% 
+  setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
+  fitBounds(m, lng1=5.932896, lat1=46.311005, lng2=6.319477, lat2=46.128334) %>%
+  addTiles() %>%
+  addMeasure() 
+m %>% addPolygons()
+pal <- colorNumeric("YlOrRd", domain = supermarkets$nb_supermarkets)
+m %>% addPolygons(
+  fillColor = ~pal(supermarkets$nb_supermarkets), 
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "3",
+  fillOpacity = 0.7,highlight = highlightOptions(
+    weight = 5,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  label = paste(supermarkets$city, ":", supermarkets$nb_supermarkets, "/Km^2"),
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto"))
+
+
+
+
+
+
+
+
+
+#### NOTES ####
 
 
 
@@ -144,6 +317,23 @@ colors_hab <- colorQuantile("YlOrRd", hab$nb_hab)
 m %>% addCircleMarkers(lng = ~lng, lat = ~lat, color = ~colors_hab(nb_hab) ,radius = ~sqrt(nb_hab)/10, label = ~paste(city, ":", nb_hab), fillOpacity = 0.8)
 
 
+# SHINY STRUCTURE
+ui <- fluidPage(
+  
+  leafletOutput("mymap"),
+  
+)
+
+server <- function(input, output, session) {
+  
+  
+  output$mymap <- renderLeaflet({
+    leaflet() %>%
+      etc. 
+  })
+}
+
+shinyApp(ui, server)
 
 
 
@@ -151,47 +341,4 @@ m %>% addCircleMarkers(lng = ~lng, lat = ~lat, color = ~colors_hab(nb_hab) ,radi
 
 
 
-
-
-
-### LEAFLET WITH POLYGONS TRIAL ###
-
-cities_bound <- geojsonio::geojson_read("https://github.com/gregmaulet/GenevAnalytics/blob/master/geneva_municipalities_boundaries.geojson", what="sp")
-
-cities_bound <- geojsonio::geojson_read("geneva_municipalities_boundaries.geojson", what="sp")
-# "geneva_municipalities_boundaries.geojson" is made from the swiss municipalties boundaries open data json file 
-# and selected with QGIS, because the canton data from SITG open data was not working  
-
-m <- leaflet()
-m <- leaflet(cities_bound) %>% 
-  setView(lng = 6.1667, lat=46.2, zoom = 1) %>%
-  fitBounds(m, lng1=5.932896, lat1=46.311005, lng2=6.319477, lat2=46.128334) %>%
-  addTiles() %>%
-  addMeasure() 
-m %>% addPolygons()
-pal <- colorQuantile("YlOrRd", domain = infractions$data)
-labels <- sprintf(NInfractions_08_19$city, NInfractions_08_19$`2019`) %>% lapply(htmltools::HTML)
-m %>% addPolygons(
-  fillColor = ~pal(NInfractions_08_19$`2019`),
-  weight = 2,
-  opacity = 1,
-  color = "white",
-  dashArray = "3",
-  fillOpacity = 0.7,highlight = highlightOptions(
-    weight = 5,
-    color = "#666",
-    dashArray = "",
-    fillOpacity = 0.7,
-    bringToFront = TRUE),
-  label = labels,
-  labelOptions = labelOptions(
-    style = list("font-weight" = "normal", padding = "3px 8px"),
-    textsize = "15px",
-    direction = "auto"))
-
-# to avoid the problem of misplacement on the map, we tried to integrate separated data to the json file. 
-infractions <- geo_join(cities_bound@data, NInfractions_19, "name", "NInfraction_19$city")
-# This function has no error message, but no effect. After hours of research, we didn't find a solution 
-# either replace the cities or to combine ou NInfractions dataframe with the json file. 
-
-
+#infractions <- geo_join(cities_bound@data, NInfractions_19, "name", "NInfraction_19$city")
