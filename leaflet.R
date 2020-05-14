@@ -158,7 +158,7 @@ m %>% addCircleMarkers(lng = ~lng, lat = ~lat, color = ~colors_hab(nb_hab) ,radi
 
 cities_bound <- geojsonio::geojson_read("https://github.com/gregmaulet/GenevAnalytics/blob/master/geneva_municipalities_boundaries.geojson", what="sp")
 
-cities_bound <- geojsonio::geojson_read("Desktop/GenevAnalytics/geneva_municipalities_boundaries.geojson", what="sp")
+cities_bound <- geojsonio::geojson_read("geneva_municipalities_boundaries.geojson", what="sp")
 # "geneva_municipalities_boundaries.geojson" is made from the swiss municipalties boundaries open data json file 
 # and selected with QGIS, because the canton data from SITG open data was not working  
 
