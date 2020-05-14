@@ -21,10 +21,11 @@ cities_bound <- geojsonio::geojson_read("geneva_municipalities_boundaries.geojso
 
 
 #INFRACTIONS DATA MODELLING 
-NInfractions_08_19=NInfractions_08_19 %>%dplyr::rename(city=`...1`)
-NInfractions_08_19=NInfractions_08_19[-1,-2]
-NInfractions_19=NInfractions_08_19 %>%dplyr::select(city,`2019`)
-infractions <- merge(NInfractions_19, cities_coordinates)
+NInfractions_08_19_2=NInfractions_08_19
+NInfractions_08_19_2=NInfractions_08_19_2 %>%dplyr::rename(city=`...1`)
+NInfractions_08_19_2=NInfractions_08_19_2[-1,-2]
+NInfractions_19_2=NInfractions_08_19_2 %>%dplyr::select(city,`2019`)
+infractions <- merge(NInfractions_19_2, cities_coordinates)
 infractions = as.data.frame(infractions)
 infractions=infractions %>% dplyr::rename(data=`2019`)
 infractions$lng= as.character(infractions$lng)
@@ -37,20 +38,22 @@ infractions$lat= as.numeric(infractions$lat)
 class(infractions$lat)
 
 #INFRACTIONS / 1000 INHAB. DATA MODELLING 
-setDT(ratioInfraction, keep.rownames = TRUE)[]
-ratioInfraction=ratioInfraction %>%dplyr::rename(city=rn)
-ratioInfraction=ratioInfraction[-1,-2]
-ratioInfraction=ratioInfraction %>%dplyr::select(city,`2019`)
-infractions_for_1000_inhab <- merge(ratioInfraction, cities_coordinates)
+ratioInfraction2=ratioInfraction
+setDT(ratioInfraction2, keep.rownames = TRUE)[]
+ratioInfraction2=ratioInfraction2 %>%dplyr::rename(city=rn)
+ratioInfraction2=ratioInfraction2[-1,-2]
+ratioInfraction2=ratioInfraction2 %>%dplyr::select(city,`2019`)
+infractions_for_1000_inhab <- merge(ratioInfraction2, cities_coordinates)
 infractions_for_1000_inhab = as.data.frame(infractions_for_1000_inhab)
 infractions_for_1000_inhab=infractions_for_1000_inhab %>% dplyr::rename(inf=`2019`)
 class(infractions_for_1000_inhab$lat)
 class(infractions_for_1000_inhab$lng)
 
 #MEDECINS DATA MODELLING 
-NMedecins=NMedecins %>% dplyr::rename(city=`...1`)
-NMedecins=NMedecins[-1,-2]
-medecins <- merge(NMedecins, cities_coordinates)
+NMedecins2=NMedecins
+NMedecins2=NMedecins2 %>% dplyr::rename(city=`...1`)
+NMedecins2=NMedecins2[-1,-2]
+medecins <- merge(NMedecins2, cities_coordinates)
 medecins = as.data.frame(medecins)
 medecins=medecins %>% dplyr::rename(nb_medecins=NMedecins)
 medecins$lng= as.character(medecins$lng)
@@ -63,78 +66,74 @@ medecins$lat= as.numeric(medecins$lat)
 class(medecins$lat)
 
 #MEDECINS / 1000 INHAB. DATA MODELLING 
-setDT(ratioMedecins, keep.rownames = TRUE)[]
-ratioMedecins=ratioMedecins %>% dplyr::rename(city=rn)
-ratioMedecins=ratioMedecins[-1,-2]
-medecins_for_1000_inhab <- merge(ratioMedecins, cities_coordinates)
+ratioMedecins2=ratioMedecins
+setDT(ratioMedecins2, keep.rownames = TRUE)[]
+ratioMedecins2=ratioMedecins2 %>% dplyr::rename(city=rn)
+ratioMedecins2=ratioMedecins2[-1,-2]
+medecins_for_1000_inhab <- merge(ratioMedecins2, cities_coordinates)
 medecins_for_1000_inhab = as.data.frame(medecins_for_1000_inhab)
 medecins_for_1000_inhab=medecins_for_1000_inhab %>% dplyr::rename(nb_medecins_for_1000_inhab=NMedecins)
 class(medecins_for_1000_inhab$lat)
 class(medecins_for_1000_inhab$lng)
 
 #ECOLES PRIMAIRES DATA MODELLING 
-NEcolePrimaire=NEcolePrimaire %>% dplyr::rename(city=`...1`)
-NEcolePrimaire=NEcolePrimaire[-1,-2]
-ecoles <- merge(NEcolePrimaire, cities_coordinates)
+NEcolePrimaire2=NEcolePrimaire
+NEcolePrimaire2=NEcolePrimaire2 %>% dplyr::rename(city=`...1`)
+NEcolePrimaire2=NEcolePrimaire2[-1,-2]
+ecoles <- merge(NEcolePrimaire2, cities_coordinates)
 ecoles = as.data.frame(ecoles)
 ecoles=ecoles %>% dplyr::rename(nb_ecole=Necole)
-ecoles$lng= as.character(ecoles$lng)
-class(ecoles$lng)
-ecoles$lng= as.numeric(ecoles$lng)
-class(ecoles$lng)
-ecoles$lat= as.character(ecoles$lat)
 class(ecoles$lat)
-ecoles$lat= as.numeric(ecoles$lat)
-class(ecoles$lat)
+class(ecoles$lng)
+
 
 #INHABITANTS DATA MODELLING 
-NHabitants_00_19=NHabitants_00_19 %>% dplyr::rename(city=`...1`)
-NHabitants_00_19=NHabitants_00_19[-1,-2]
-NHabitants_00_19=NHabitants_00_19 %>%dplyr::select(city,`2019`)
-hab <- merge(NHabitants_00_19, cities_coordinates)
+NHabitants_00_192=NHabitants_00_19
+NHabitants_00_192=NHabitants_00_192 %>% dplyr::rename(city=`...1`)
+NHabitants_00_192=NHabitants_00_192[-1,-2]
+NHabitants_00_192=NHabitants_00_192 %>%dplyr::select(city,`2019`)
+hab <- merge(NHabitants_00_192, cities_coordinates)
 hab = as.data.frame(hab)
 hab=hab %>% dplyr::rename(nb_hab=`2019`)
-hab$lng= as.character(hab$lng)
-hab$lng= as.numeric(hab$lng)
 class(hab$lng)
-hab$lat= as.character(hab$lat)
-hab$lat= as.numeric(hab$lat)
 class(hab$lat)
 
+
 #SUPERMARKETS / KM^2 DATA MODELLING 
-setDT(ratio_Supermarches, keep.rownames = TRUE)[]
-ratio_Supermarches=ratio_Supermarches %>%dplyr::rename(city=rn)
-ratio_Supermarches=ratio_Supermarches[-1,-2]
-ratio_Supermarches=ratio_Supermarches %>%dplyr::select(city,"Total Super")
-supermarkets <- merge(ratio_Supermarches, cities_coordinates)
+ratio_Supermarches2=ratio_Supermarches
+setDT(ratio_Supermarches2, keep.rownames = TRUE)[]
+ratio_Supermarches2=ratio_Supermarches2 %>%dplyr::rename(city=rn)
+ratio_Supermarches2=ratio_Supermarches2[-1,-2]
+ratio_Supermarches2=ratio_Supermarches2 %>%dplyr::select(city,"Total Super")
+supermarkets <- merge(ratio_Supermarches2, cities_coordinates)
 supermarkets = as.data.frame(supermarkets)
 supermarkets=supermarkets %>% dplyr::rename(nb_supermarkets="Total Super")
-supermarkets$lng= as.character(supermarkets$lng)
-supermarkets$lng= as.numeric(supermarkets$lng)
-supermarkets$lat= as.character(supermarkets$lat)
-supermarkets$lat= as.numeric(supermarkets$lat)
+class(supermarkets$lat)
+class(supermarkets$lng)
+
 
 #SUPERFICIE DATA MODELLING
-setDT(Superficie_OK, keep.rownames = TRUE)[]
-Superficie_OK=Superficie_OK %>%dplyr::rename(city=rn)
-Superficie_OK=Superficie_OK[-1,-2]
-superficie <- merge(Superficie_OK, cities_coordinates)
+Superficie_OK2=Superficie_OK
+setDT(Superficie_OK2, keep.rownames = TRUE)[]
+Superficie_OK2=Superficie_OK2 %>%dplyr::rename(city=rn)
+Superficie_OK2=Superficie_OK2[-1,-2]
+superficie <- merge(Superficie_OK2, cities_coordinates)
 superficie = as.data.frame(superficie)
-superficie$lng= as.character(superficie$lng)
-superficie$lng= as.numeric(superficie$lng)
-superficie$lat= as.character(superficie$lat)
-superficie$lat= as.numeric(superficie$lat)
+class(superficie$lat)
+class(superficie$lng)
+
 
 #INVESTMENT SPENDING / INHAB. DATA MODELLING
-setDT(ratioDI, keep.rownames = TRUE)[]
-ratioDI=ratioDI %>%dplyr::rename(city=rn)
-ratioDI=ratioDI[-1,-2]
-ratioDI=ratioDI %>%dplyr::select(city,`2017`)
-ratioDI=ratioDI %>% dplyr::rename(DI=`2017`)
-di <- merge(ratioDI, cities_coordinates)
+ratioDI2=ratioDI
+setDT(ratioDI2, keep.rownames = TRUE)[]
+ratioDI2=ratioDI2 %>%dplyr::rename(city=rn)
+ratioDI2=ratioDI2[-1,-2]
+ratioDI2=ratioDI2 %>%dplyr::select(city,`2017`)
+ratioDI2=ratioDI2 %>% dplyr::rename(DI=`2017`)
+di <- merge(ratioDI2, cities_coordinates)
 di = as.data.frame(di)
-
-
+class(di$lat)
+class(di$lng)
 
 
 
@@ -162,7 +161,7 @@ m %>% addPolygons(
     dashArray = "",
     fillOpacity = 0.7,
     bringToFront = TRUE),
-  label = paste(infractions$city, ":", infractions$data),
+  label = paste(infractions$city, ":", infractions$data, "violations"),
   labelOptions = labelOptions(
     style = list("font-weight" = "normal", padding = "3px 8px"),
     textsize = "15px",
