@@ -12,6 +12,7 @@ library(shiny)
 library(plyr)
 library(dplyr)
 library(data.table)
+source("Data_Analysis.R")
 
 cities_coordinates=Latitude_Longitude
 cities_coordinates=cities_coordinates %>% dplyr::rename(city=`...1`)
