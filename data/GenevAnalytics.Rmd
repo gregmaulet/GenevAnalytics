@@ -1,12 +1,12 @@
 ```{r}
 rm(list = ls())
 
-
 library(dplyr)
 
 data("DepensesInvestiss_00_17")
 ls()
-DepensesInvestiss_00_17 %>% head()
+DepensesInvestiss_00
+_17 %>% head()
 
 data("Loyermoyen100m2_06_19")
 ls()
@@ -51,7 +51,7 @@ Superficie %>% head()
 ###2.0)DIVERS---------------------------------------
 #Vector of Commune names
 x <- c("NA","Aire-la-Ville","Anieres", "Avully", "Avusy",
-       "Bardonnex","Bellevue","Bernex","Carouge", "Cartigny",
+       " Bardonnex","Bellevue","Bernex","Carouge", "Cartigny",
        "Celigny", "Chancy",  "Chene-Bougeries", "Chene-Bourg",
        "Choulex","Collex-Bossy","Collonge-Bellerive","Cologny",
        "Confignon","Corsier","Dardagny","Geneve","Genthod",
@@ -112,6 +112,8 @@ cities_coordinates[42,2:3] <- c(46.2167, 6.2)
 cities_coordinates[43,2:3] <- c(46.2167, 6.0833)
 cities_coordinates[44,2:3] <- c(46.2833, 6.1667)
 cities_coordinates[45,2:3] <- c(46.1833, 6.2)
+
+
 
 
 ###3.0)CLEANDATA&RATIOS---------------------------------------
@@ -402,60 +404,3 @@ fcommodite("Geneve")
 fservice("Geneve")
 
 ```
-
-
-```{r} 
-#Leaflet example for Matthias : r?gler manuellement les valeurs et donc laborieux
-library(leaflet)
-library(htmltools)
-
-city <- c("Onex")
-
-lat = c(46.1833)
-lon = c(6.1)
-HW2table = data.frame(cbind(lat, lon))
-
-table2 <- c("Onex")
-
-m <- leaflet() %>%
-  addTiles() %>%  
-  addPopups(lng = HW2table$lon, lat = HW2table$lat, table2 , options = popupOptions(closeButton=FALSE)) %>%
-  addCircleMarkers(lng=HW2table$lon, lat=HW2table$lat,radius = HW2table$Champions)
-
-m
-```
-
-##Latitude longitude dataframe for Matthias 
-latlon0  <- as.data.frame(cities_coordinates)
-latlon <- latlon0[,-1]
-rownames(latlon) <- latlon0[,1]
-
-freturnlatlon <- function(a){x <- latlon[c(a),]
-return(x)
-}
-#Example
-freturnlatlon("Geneve")
-
-##Fonction pour automatiser leaflet. Besoin de chunk sinon ?a fait rien et le processeur de l'ordi fait n'imp. MAJ : ne marche plus  !!
-```{r}
-library(leaflet)
-library(htmltools)
-
-experiment <- function(a){city <- c(a)
-
-lat = latlon[c(a),c(1)]
-lon = latlon[c(a),c(2)]
-HW2table = data.frame(cbind(lat, lon))
-
-table2 <- c(a)
-
-m <- leaflet() %>%
-  addTiles() %>%  
-  addPopups(lng = HW2table$lon, lat = HW2table$lat, table2 , options = popupOptions(closeButton=FALSE)) %>%
-  addCircleMarkers(lng=HW2table$lon, lat=HW2table$lat,radius = HW2table$Champions)
-
-m
-}
-experiment("Vernier")
-```
-
